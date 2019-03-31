@@ -66,7 +66,10 @@ through Laminar, in Scala, which is more robust and more
 customizable.
 
 Components can be easily inserted within the default Laminar
-reactive elements via implicit conversion.  
+reactive elements via implicit conversion.
+
+In here, every component will live in its own Scala
+package, within the `components` package.
 
 
 ### Try it myself?
@@ -75,6 +78,65 @@ It's quite easy. Make sure you have
 [sbt](https://www.scala-sbt.org/)
 installed. Within it, execute the `fastOptJS` command, and
 open the `html/index.html` file in any browser.
+
+
+### CSS?
+
+We decided to use 
+[ScalaTags](http://www.lihaoyi.com/scalatags/)
+for doing CSS. ScalaTags allows for making type-safe
+CSS style-sheet within the Scala code, and it
+generates for us the desired CSS code.
+
+In order to make component-specific style, the way we
+do it is to make a `StyleSheet` or
+`CascadingStyleSheet` `object` in the same package as 
+the component. This `object` can for example be
+package-private, so that it is only available for
+its component. Then, the `cls` reactive attribute
+of the elements can be set as the `name` property
+of the ScalaTags CSS classes.
+
+The generated CSS needs to be inserted in a 
+`<style>` element in the head of the document. This
+is done automatically for you if you extend
+`ComponentStyleSheet` or
+`CascadingComponentStyleSheet`.
+
+#### Example
+
+Here we make a simple component `Foo` that displays
+a `<span>` with red background colour. This background
+colour will come from a CSS class.
+
+In `FooStyles.scala`:
+```scala
+package components.foo
+
+import components.css.CascadingComponentStyleSheet
+import scalatags.Text.all._
+
+private[foo] object FooStyles extends CascadingComponentStyleSheet {
+  initStyleSheet()
+  val redBG = cls(backgroundColor := "red")
+}
+```
+In `Foo.scala`:
+```scala
+package components.foo
+
+import com.raquo.laminar.api.L._
+import com.raquo.laminar.nodes.ReactiveElement
+import components.Component
+import org.scalajs.dom
+
+final class Foo extends Component[dom.html.Span] {
+  val rel: ReactiveElement[dom.html.Span] =
+    span(FooStyles.redBG.name, "Hello")
+}
+```
+
+
 
 
 ### Entry point?
