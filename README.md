@@ -67,3 +67,19 @@ customizable.
 
 Components can be easily inserted within the default Laminar
 reactive elements via implicit conversion.  
+
+
+### Try it myself?
+
+It's quite easy. Make sure you have
+[sbt](https://www.scala-sbt.org/)
+installed. Within it, execute the `fastOptJS` command, and
+open the `html/index.html` file in any browser.
+
+
+### Entry point?
+
+As any Scala application, the entry point is some `main`
+method of a top level `object`. In this case, you'll find
+it at `src/main/scala/main/LaminarTourOfHeroes`. In here,
+it mainly renders the top component, called `appComponent`.
