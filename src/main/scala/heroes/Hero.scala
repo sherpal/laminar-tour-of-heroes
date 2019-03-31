@@ -1,5 +1,3 @@
 package heroes
 
-final class Hero(val id: Int, val name: String) {
-
-}
+final case class Hero(id: Int, name: String)
