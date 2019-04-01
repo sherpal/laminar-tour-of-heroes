@@ -1,3 +1,7 @@
 package heroes
 
-final case class Hero(id: Int, name: String)
+import com.raquo.airstream.signal.Var
+
+final class Hero(val id: Int, initialName: String) {
+  val name: Var[String] = Var(initialName)
+}

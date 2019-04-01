@@ -14,17 +14,17 @@ object Heroes {
     * { id: 19, name: 'Magma' },
     * { id: 20, name: 'Tornado' }
     */
-  val heroes: List[Hero] = List(
-    Hero(11, "Mr. Nice"),
-    Hero(12, "Narco"),
-    Hero(13, "Bombasto"),
-    Hero(14, "Celeritas"),
-    Hero(15, "Magneta"),
-    Hero(16, "RubberMan"),
-    Hero(17, "Dynama"),
-    Hero(18, "Dr IQ"),
-    Hero(19, "Magma"),
-    Hero(20, "Tornado")
+  val heroes: List[IHero] = List(
+    IHero(11, "Mr. Nice"),
+    IHero(12, "Narco"),
+    IHero(13, "Bombasto"),
+    IHero(14, "Celeritas"),
+    IHero(15, "Magneta"),
+    IHero(16, "RubberMan"),
+    IHero(17, "Dynama"),
+    IHero(18, "Dr IQ"),
+    IHero(19, "Magma"),
+    IHero(20, "Tornado")
   )
 
 }

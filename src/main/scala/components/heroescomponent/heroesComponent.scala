@@ -7,40 +7,29 @@ import heroes.{Hero, Heroes}
 import org.scalajs.dom.html
 
 final case class heroesComponent() extends Component[html.Div] {
-
-  private val selectedHero: Var[Hero] = Var(Hero(1, "Windstorm"))
-
-  private val heroes: Var[List[Hero]] = Var(Heroes.heroes)
-
-  private val $heroesLI = heroes.signal.map(
-    _.map(h => li(
-      span(cls := "badge", h.id.toString), h.name,
-      onClick --> (_ => selectedHero.set(h))
-    ))
-  )
-
   private val styles = HeroesComponentStyles
 
-  val rel: ReactiveElement[html.Div] = div(
-    h2("My Heroes"),
-    ul(
-      cls := styles.heroes.name,
-      children <-- $heroesLI
-    ),
-    h2(
-      child <-- selectedHero.signal.map(_.name.toUpperCase),
-      " Details"
-    ),
-    div(span("id: "), child <-- selectedHero.signal.map(_.id.toString)),
-    div(span("name: "), child <-- selectedHero.signal.map(_.name)),
-    div(
-      label("name:",
-        input(
-          placeholder := "name",
-          inContext(thisInput => onInput.mapTo(selectedHero.now().copy(name = thisInput.ref.value)) --> selectedHero.writer)
-        )
-      )
+  private val selectedHero: Var[Option[Hero]] = Var(None)
+  private val heroes: List[Hero] = Heroes.heroes.map(_.hero)
+
+  private val heroesLIs = heroes.map(
+    h => li(
+      // change the class to "selected" if this hero is clicked
+      cls <-- selectedHero.signal.map(s => s.isDefined && s.get == h).map(if (_) styles.selected.name else ""),
+      span(cls := styles.badge.name, h.id.toString), // id of this hero
+      child <-- h.name.signal.map(s => s), // name of this hero
+      onClick.mapTo(Some(h)) --> selectedHero.writer // switch selected hero on click
     )
   )
 
+  val rel: ReactiveElement[html.Div] = div(
+    h2("My Heroes"),
+    // list of all heroes
+    ul(cls := styles.heroes.name, heroesLIs),
+    /** change the [[selectedHeroComponent]] when a Hero in the list is clicked */
+    child <-- selectedHero.signal.map({
+      case None       => ""
+      case Some(hero) => selectedHeroComponent(hero)
+    })
+  )
 }
