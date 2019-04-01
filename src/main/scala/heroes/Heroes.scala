@@ -1,6 +1,11 @@
 package heroes
 
-object Heroes {
+import services.HeroService
+
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
+object Heroes extends HeroService {
 
   /**
     * { id: 11, name: 'Mr. Nice' },
@@ -14,7 +19,7 @@ object Heroes {
     * { id: 19, name: 'Magma' },
     * { id: 20, name: 'Tornado' }
     */
-  val heroes: List[IHero] = List(
+  val heroes: Future[List[IHero]] = Future(List(
     IHero(11, "Mr. Nice"),
     IHero(12, "Narco"),
     IHero(13, "Bombasto"),
@@ -25,6 +30,6 @@ object Heroes {
     IHero(18, "Dr IQ"),
     IHero(19, "Magma"),
     IHero(20, "Tornado")
-  )
+  ))
 
 }

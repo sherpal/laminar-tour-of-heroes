@@ -4,6 +4,7 @@ import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveElement
 import components.Component
 import components.heroescomponent.heroesComponent
+import heroes.Heroes
 import org.scalajs.dom.html
 
 /**
@@ -16,7 +17,7 @@ final case class appComponent() extends Component[html.Div] {
 
   val rel: ReactiveElement[html.Div] = div(
     h1(title),
-    heroesComponent()
+    heroesComponent(Heroes)
   )
 
 }

@@ -3,16 +3,28 @@ package components.heroescomponent
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveElement
 import components.Component
-import heroes.{Hero, Heroes}
+import heroes.Hero
 import org.scalajs.dom.html
+import services.HeroService
 
-final case class heroesComponent() extends Component[html.Div] {
+import scala.concurrent.ExecutionContext.Implicits.global
+
+final case class heroesComponent(heroService: HeroService) extends Component[html.Div] {
   private val styles = HeroesComponentStyles
 
   private val selectedHero: Var[Option[Hero]] = Var(None)
-  private val heroes: List[Hero] = Heroes.heroes.map(_.hero)
+  private val heroes: Var[List[Hero]] = Var(Nil)
 
-  private val heroesLIs = heroes.map(
+  // getHeroes in Angular
+  def fetchHeroes(): Unit = {
+    for (hs <- heroService.heroes.map(_.map(_.hero))) {
+      heroes.set(hs)
+    }
+  }
+
+  fetchHeroes()
+
+  private val heroesLIs = children <-- heroes.signal.map(_.map(
     h => li(
       // change the class to "selected" if this hero is clicked
       cls <-- selectedHero.signal.map(s => s.isDefined && s.get == h).map(if (_) styles.selected.name else ""),
@@ -20,7 +32,7 @@ final case class heroesComponent() extends Component[html.Div] {
       child <-- h.name.signal.map(s => s), // name of this hero
       onClick.mapTo(Some(h)) --> selectedHero.writer // switch selected hero on click
     )
-  )
+  ))
 
   val rel: ReactiveElement[html.Div] = div(
     h2("My Heroes"),
