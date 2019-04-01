@@ -132,7 +132,7 @@ import org.scalajs.dom
 
 final class Foo extends Component[dom.html.Span] {
   val rel: ReactiveElement[dom.html.Span] =
-    span(FooStyles.redBG.name, "Hello")
+    span(cls := FooStyles.redBG.name, "Hello")
 }
 ```
 
