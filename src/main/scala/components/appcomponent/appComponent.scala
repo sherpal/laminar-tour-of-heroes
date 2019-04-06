@@ -3,10 +3,10 @@ package components.appcomponent
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveElement
 import components.Component
-import components.heroescomponent.heroesComponent
 import components.messagescomponent.messagesComponent
-import heroes.Heroes
+import components.routercomponent.topLevelRouter
 import org.scalajs.dom.html
+import services.routing.Router
 
 /**
   * Entry point of the Tour of Heroes application.
@@ -18,7 +18,13 @@ final case class appComponent() extends Component[html.Div] {
 
   val rel: ReactiveElement[html.Div] = div(
     h1(title),
-    heroesComponent(Heroes),
+    Router.makeNav(
+      Map(
+        "/" -> "Dashboard",
+        "/heroes" -> "Heroes"
+      )
+    ),
+    topLevelRouter(),
     messagesComponent()
   )
 

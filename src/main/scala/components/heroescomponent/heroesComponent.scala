@@ -1,26 +1,18 @@
 package components.heroescomponent
 
+import com.raquo.airstream.signal.Var
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveElement
 import components.Component
+import components.withheroescomponents.WithHeroes
 import heroes.Hero
 import org.scalajs.dom.html
 import services.HeroService
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
-final case class heroesComponent(heroService: HeroService) extends Component[html.Div] {
+final case class heroesComponent(protected val heroService: HeroService) extends Component[html.Div] with WithHeroes {
   private val styles = HeroesComponentStyles
 
-  private val selectedHero: Var[Option[Hero]] = Var(None)
-  private val heroes: Var[List[Hero]] = Var(Nil)
-
-  // getHeroes in Angular
-  def fetchHeroes(): Unit = {
-    for (hs <- heroService.heroes.map(_.map(_.hero))) {
-      heroes.set(hs)
-    }
-  }
+  protected val selectedHero: Var[Option[Hero]] = Var(None)
 
   fetchHeroes()
 
